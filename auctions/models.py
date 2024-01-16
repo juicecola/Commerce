@@ -17,3 +17,11 @@ class Listing(models.Model):
         User, on_delete=models.CASCADE, related_name='listings')
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+
+
+class Bid(models.Model):
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    listing = models.ForeignKey(
+        Listing, on_delete=models.CASCADE, related_name='bids')
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
