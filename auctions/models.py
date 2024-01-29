@@ -7,6 +7,7 @@ class User(AbstractUser):
 
 
 class Listing(models.Model):
+    id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)
@@ -23,6 +24,7 @@ class Listing(models.Model):
 
 
 class Bid(models.Model):
+    id = models.BigAutoField(primary_key=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     listing = models.ForeignKey(
         Listing, on_delete=models.CASCADE, related_name='bids')
@@ -34,6 +36,7 @@ class Bid(models.Model):
 
 
 class Comment(models.Model):
+    id = models.BigAutoField(primary_key=True)
     content = models.TextField()
     listing = models.ForeignKey(
         Listing, on_delete=models.CASCADE, related_name='comments')
