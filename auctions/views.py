@@ -9,7 +9,6 @@ from .models import Listing
 from .models import User
 
 
-@login_required
 def index(request):
     return render(request, "auctions/index.html")
 
