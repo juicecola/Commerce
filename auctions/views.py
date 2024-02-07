@@ -2,9 +2,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from .models import Listing
+from .forms import ListingForm
 
 from .models import User
 
@@ -90,3 +91,15 @@ def create_listing(request):
         return redirect('index')
 
     return render(request, 'auctions/create_listing.html')
+
+
+def create_listing(request):
+    if request.method == 'POST':
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+        else:
+            form = ListingForm()
+
+        return render(request, 'auctions/create_listing.html', {'form': form})
