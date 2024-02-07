@@ -103,3 +103,8 @@ def create_listing(request):
         form = ListingForm()
 
     return render(request, 'auctions/create_listing.html', {'form': form})
+
+
+def active_listings(request):
+    active_listings = Listing.objects.all()
+    return render(request, 'auctions/active_listings.html', {'active_listings': active_listings})
