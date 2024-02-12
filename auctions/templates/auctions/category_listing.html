@@ -1,0 +1,10 @@
+{% extends 'auctions/layout.html' %}
+
+{% block content %}
+<h1>{{ category }} Listings</h1>
+<ul>
+    {% for listing in listings %}
+        <li>{{ listing.title }} - Current Price: {{ listing.current_price }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
