@@ -6,8 +6,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from .models import Listing
 from .forms import ListingForm
-
-from .models import User
+from .models import User, Watchlist
+from django.contrib.auth import get_user
 
 
 def index(request):
@@ -69,35 +69,25 @@ def register(request):
 @login_required
 def create_listing(request):
     if request.method == 'POST':
-        title = request.POST['title']
-        description = request.POST['description']
-        starting_bid = request.POST['starting_bid']
-        category = request.POST.get('category', None)
-        image_url = request.POST.get('image_url', None)
-
-        # Validate the input data as needed
-
-        new_listing = Listing(
-            title=title,
-            description=description,
-            starting_bid=starting_bid,
-            category=category,
-            image_url=image_url,
-            current_bid=starting_bid,  # Set initial bid as starting bid
-            created_by=request.user
-        )
-        new_listing.save()
-
-        return redirect('index')
-
-    return render(request, 'auctions/create_listing.html')
-
-
-def create_listing(request):
-    if request.method == 'POST':
         form = ListingForm(request.POST)
         if form.is_valid():
-            form.save()
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            starting_bid = form.cleaned_data['starting_bid']
+            category = form.cleaned_data['category']
+            image_url = form.cleaned_data['image_url']
+
+            # Create new listing object
+            new_listing = Listing(
+                title=title,
+                description=description,
+                starting_bid=starting_bid,
+                category=category,
+                image_url=image_url,
+                current_bid=starting_bid,  # Set initial bid as starting bid
+                created_by=request.user
+            )
+            new_listing.save()
             return redirect('index')
     else:
         form = ListingForm()
@@ -108,3 +98,10 @@ def create_listing(request):
 def active_listings(request):
     active_listings = Listing.objects.all()
     return render(request, 'auctions/active_listings.html', {'active_listings': active_listings})
+
+
+@login_required
+def watchlist(request):
+    user = get_user(request)
+    user_watchlist = Watchlist.objects.filter(user=request.user)
+    return render(request, 'auctions/watchlist.html', {'watchlist': user_watchlist})
