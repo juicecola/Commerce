@@ -110,3 +110,8 @@ def watchlist(request):
 def categories(request):
     categories = Listing.objects.values_list('category', flat=True).distinct()
     return render(request, 'auctions/categories.html', {'categories': categories})
+
+
+def category_listings(request, category):
+    listings = Listing.objects.filter(category=category, is_active=True)
+    return render(request, 'auctions/category_listings.html', {'listings': listings, 'category': category})
