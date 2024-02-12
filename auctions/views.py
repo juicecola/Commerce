@@ -105,3 +105,8 @@ def watchlist(request):
     user = get_user(request)
     user_watchlist = Watchlist.objects.filter(user=request.user)
     return render(request, 'auctions/watchlist.html', {'watchlist': user_watchlist})
+
+
+def categories(request):
+    categories = Listing.objects.values_list('category', flat=True).distinct()
+    return render(request, 'auctions/categories.html', {'categories': categories})
